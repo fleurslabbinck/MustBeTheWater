@@ -4,7 +4,7 @@
 #include "freertos/task.h"
 #include "sdkconfig.h"
 
-#include "Components/LED.h"
+#include "Components/Led.h"
 
 // (GPIO 2 is responsible for onboard LED)
 constexpr uint8_t BLINK_GPIO{2};
@@ -13,7 +13,7 @@ extern "C" void app_main(void)
 {
     using namespace gg;
 
-    LED Blinker{BLINK_GPIO};
+    Led Blinker{BLINK_GPIO};
 
     // Blink loop
     while (true)
