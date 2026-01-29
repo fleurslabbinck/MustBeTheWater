@@ -5,7 +5,7 @@
 namespace gg
 {
     // Call to create and start task pinned to specific core
-    void Task::Init(const std::string& name, uint32_t stackSize, uint8_t priority, CoreSelect core)
+    void Task::Init(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core)
     {
         BaseType_t coreIdx{static_cast<BaseType_t>(core)};
         if (core == CoreSelect::None)
@@ -15,7 +15,7 @@ namespace gg
 
         int createIdx{xTaskCreatePinnedToCore(
             TaskEntry, 
-            name.c_str(), 
+            name, 
             stackSize, 
             this, 
             static_cast<UBaseType_t>(priority), 
@@ -25,16 +25,16 @@ namespace gg
 
         if (createIdx > 0)
         {
-            LogManager::Get().Log("TASK (" + name + ") CREATED SUCCESSFULLY\n");
+            LogManager::Get().Log(std::string(name), "TASK CREATED SUCCESSFULLY");
         }
         else
         {
-            LogManager::Get().Log("TASK (" + name + ") FAILED: COULD NOT ALLOCATE MEMORY\n");
+            LogManager::Get().Log(std::string(name), "FAILED: COULD NOT ALLOCATE MEMORY");
         }
     }
 
     // Call to create and start task
-    void Task::Init(const std::string& name, uint32_t stackSize, uint8_t priority)
+    void Task::Init(const char* name, uint32_t stackSize, uint8_t priority)
     {
         Init(name, stackSize, priority, CoreSelect::None);
     }
@@ -52,20 +52,18 @@ namespace gg
         while (!StopRequested())
         {
             // Wait and check if task is ready to execute
-            if (Wait())
+            if (WaitForWork())
             {
                 Execute();
             }
         }
 
-        // Avoid dangling pointer
-        m_Handle = nullptr;
-
         // Clean up when task has ended
         vTaskDelete(nullptr);
     }
 
-    // Don't suspend task that is holding a mutex, can cause system to deadlock
+    // Cause task to be suspended and never get any CPU time no matter the priority
+    // Don't suspend task that is holding a mutex, can cause system to deadlock!
     void Task::Suspend()
     {
         if (m_Handle)
@@ -90,5 +88,8 @@ namespace gg
 
         // Unblock task so request can get consumed
         Unblock();
+
+        // Revoke external control
+        m_Handle = nullptr;
     }
 }

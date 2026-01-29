@@ -1,5 +1,5 @@
-#ifndef NOTIFICATIONTASK_H
-#define NOTIFICATIONTASK_H
+#ifndef NOTIFICATION_TASK_H
+#define NOTIFICATION_TASK_H
 
 #include "Task.h"
 
@@ -17,7 +17,7 @@ namespace gg
     protected:
         TickType_t m_WaitTicks{portMAX_DELAY};
 
-        bool Wait() override;
+        bool WaitForWork() override;
         void Unblock() override;
     };
 }

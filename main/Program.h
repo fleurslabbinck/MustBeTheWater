@@ -1,10 +1,9 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#include "Tasks/SoilSensorTask.h"
-
 namespace gg
 {
+    // Task bootstrapper
     class Program final
     {
     public:
@@ -15,10 +14,7 @@ namespace gg
         Program& operator=(const Program&) = delete;
         Program& operator=(Program&&) = delete;
 
-        void Init();
-
-    private:
-        static SoilSensorTask m_SoilSensorTask;
+        void Init() const;
     };
 }
 #endif

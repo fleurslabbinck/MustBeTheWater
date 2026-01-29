@@ -1,12 +1,13 @@
 #include "Program.h"
 
+#include "SystemTasks.h"
+
 namespace gg
 {
-    SoilSensorTask Program::m_SoilSensorTask{};
-
     // Start tasks
-    void Program::Init()
+    void Program::Init() const
     {
-        m_SoilSensorTask.Start();
+        SystemTasks::s_BlinkLedTaskA.Start();
+        SystemTasks::s_BlinkLedTaskB.Start();
     }
 }

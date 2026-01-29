@@ -11,6 +11,6 @@ namespace gg
 
     void LogManager::Log(const std::string& id, const std::string& message) const
     {
-        std::cout << id << " " << message << std::endl;
+        std::cout << id << ": " << message << std::endl;
     }
 }

@@ -1,5 +1,5 @@
-#ifndef SOILSENSORTASK_H
-#define SOILSENSORTASK_H
+#ifndef SOIL_SENSOR_TASK_H
+#define SOIL_SENSOR_TASK_H
 
 #include "Tasks/NotificationTask.h"
 #include "Components/Led.h"
@@ -9,7 +9,7 @@ namespace gg
     class SoilSensorTask final : public NotificationTask
     {
     public:
-        SoilSensorTask();
+        SoilSensorTask(uint8_t gpioPin, uint32_t waitTime);
         SoilSensorTask(const SoilSensorTask&) = delete;
         SoilSensorTask(SoilSensorTask&&) = delete;
         SoilSensorTask& operator=(const SoilSensorTask&) = delete;
@@ -18,9 +18,6 @@ namespace gg
         void Start();
 
     private:
-        bool m_Blink{false};
-        Led m_Led;
-
         void Execute() override;
     };
 }

@@ -3,9 +3,9 @@
 #include "sdkconfig.h"
 #include "Program.h"
 
-static gg::Program program{};
 
 extern "C" void app_main(void)
 {
+    const gg::Program program{};
     program.Init();
 }

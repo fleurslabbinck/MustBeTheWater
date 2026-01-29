@@ -11,6 +11,8 @@ extern "C" {
 
 namespace gg
 {
+    // Task Base class
+    // NOTE: Task wrapper must have static storage duration
     class Task
     {
     public:
@@ -35,10 +37,10 @@ namespace gg
         TaskHandle_t GetHandle() const {return m_Handle;}
 
     protected:
-        void Init(const std::string& name, uint32_t stackSize, uint8_t priority, CoreSelect core);
-        void Init(const std::string& name, uint32_t stackSize, uint8_t priority);
+        void Init(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core);
+        void Init(const char* name, uint32_t stackSize, uint8_t priority);
         virtual void Execute() = 0;
-        virtual bool Wait() = 0;
+        virtual bool WaitForWork() = 0;
         virtual void Unblock() = 0;
 
         bool StopRequested() const {return m_StopRequested.load(std::memory_order_relaxed);}

@@ -6,7 +6,7 @@ namespace gg
     : m_WaitTicks{pdMS_TO_TICKS(waitTime)}
     {}
 
-    bool NotificationTask::Wait()
+    bool NotificationTask::WaitForWork()
     {
         // Task is blocked until it gets notified or the waiting time passes
         ulTaskNotifyTake(pdTRUE, m_WaitTicks);
