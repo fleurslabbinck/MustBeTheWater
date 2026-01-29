@@ -1,0 +1,54 @@
+#ifndef TASK_H
+#define TASK_H
+
+extern "C" {
+    #include "freertos/FreeRTOS.h"
+    #include "freertos/task.h"
+}
+
+#include <string>
+#include <atomic>
+
+namespace gg
+{
+    class Task
+    {
+    public:
+        enum class CoreSelect : int8_t
+        {
+            CoreZero = 0,
+            CoreOne = 1,
+            None = -1
+        };
+
+        Task() = default;
+        virtual ~Task() = default;
+        Task(const Task&) = delete;
+        Task(Task&&) = delete;
+        Task& operator=(const Task&) = delete;
+        Task& operator=(Task&&) = delete;
+
+        void Suspend();
+        void Resume();
+        void End();
+
+        TaskHandle_t GetHandle() const {return m_Handle;}
+
+    protected:
+        void Init(const std::string& name, uint32_t stackSize, uint8_t priority, CoreSelect core);
+        void Init(const std::string& name, uint32_t stackSize, uint8_t priority);
+        virtual void Execute() = 0;
+        virtual bool Wait() = 0;
+        virtual void Unblock() = 0;
+
+        bool StopRequested() const {return m_StopRequested.load(std::memory_order_relaxed);}
+    
+    private:
+        std::atomic<bool> m_StopRequested{false};
+        TaskHandle_t m_Handle{nullptr};
+
+        static void TaskEntry(void* pvParameters);
+        void Run();
+    };
+}
+#endif

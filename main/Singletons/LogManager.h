@@ -15,8 +15,8 @@ namespace gg
         LogManager& operator=(const LogManager&) = delete;
         LogManager& operator=(LogManager&&) = delete;
 
-        void Log(const std::string& message);
-        void Log(const std::string& id, const std::string& messsage);
+        void Log(const std::string& message) const;
+        void Log(const std::string& id, const std::string& messsage) const;
 
     private:
         friend class Singleton<LogManager>;

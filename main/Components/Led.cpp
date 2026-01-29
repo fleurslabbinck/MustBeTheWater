@@ -4,8 +4,8 @@
 
 namespace gg
 {
-    constexpr uint32_t OFF{0};
-    constexpr uint32_t ON{1};
+    static constexpr uint32_t ON{1};
+    static constexpr uint32_t OFF{0};
 
     const std::string Led::m_OnMessage{"LED ON"};
     const std::string Led::m_OffMessage{"LED OFF"};
