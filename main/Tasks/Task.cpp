@@ -49,6 +49,8 @@ namespace gg
     // Task loop
     void Task::Run()
     {
+        InitOnStart();
+
         while (!StopRequested())
         {
             // Wait and check if task is ready to execute

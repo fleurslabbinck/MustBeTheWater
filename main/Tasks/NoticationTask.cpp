@@ -17,7 +17,7 @@ namespace gg
     void NotificationTask::Unblock()
     {
         const TaskHandle_t handle{GetHandle()};
-        if (handle)
+        if (GetHandle())
         {
             xTaskNotify(handle, 0, eNoAction);
         }

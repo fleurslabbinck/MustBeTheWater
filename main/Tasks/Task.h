@@ -39,6 +39,7 @@ namespace gg
     protected:
         void Init(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core);
         void Init(const char* name, uint32_t stackSize, uint8_t priority);
+        virtual void InitOnStart() {}
         virtual void Execute() = 0;
         virtual bool WaitForWork() = 0;
         virtual void Unblock() = 0;
