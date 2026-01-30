@@ -6,7 +6,6 @@ extern "C" {
     #include "freertos/task.h"
 }
 
-#include <string>
 #include <atomic>
 
 namespace gg
@@ -24,7 +23,7 @@ namespace gg
         };
 
         Task() = default;
-        virtual ~Task() = default;
+        virtual ~Task();
         Task(const Task&) = delete;
         Task(Task&&) = delete;
         Task& operator=(const Task&) = delete;

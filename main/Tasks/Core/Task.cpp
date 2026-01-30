@@ -4,6 +4,11 @@
 
 namespace gg
 {
+    Task::~Task()
+    {
+        m_Handle = nullptr;
+    }
+
     // Call to create and start task pinned to specific core
     void Task::Init(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core)
     {
@@ -18,7 +23,7 @@ namespace gg
             name, 
             stackSize, 
             this, 
-            static_cast<UBaseType_t>(priority), 
+            priority, 
             &m_Handle, 
             coreIdx)
         };
