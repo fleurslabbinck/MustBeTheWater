@@ -1,7 +1,7 @@
 #ifndef NOTIFICATION_TASK_H
 #define NOTIFICATION_TASK_H
 
-#include "Tasks/Task.h"
+#include "Tasks/Core/Task.h"
 
 namespace gg
 {

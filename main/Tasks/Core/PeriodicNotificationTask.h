@@ -1,7 +1,7 @@
 #ifndef PERIODIC_NOTIFICATION_TASK_H
 #define PERIODIC_NOTIFICATION_TASK_H
 
-#include "Tasks/Task.h"
+#include "Tasks/Core/Task.h"
 
 namespace gg
 {

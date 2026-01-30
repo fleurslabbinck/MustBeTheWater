@@ -1,7 +1,7 @@
 #ifndef SOIL_SENSOR_TASK_H
 #define SOIL_SENSOR_TASK_H
 
-#include "Tasks/NotificationTask.h"
+#include "Tasks/Core/NotificationTask.h"
 #include "Components/Led.h"
 
 namespace gg
