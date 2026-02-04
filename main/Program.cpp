@@ -7,7 +7,7 @@ namespace gg
     // Start tasks
     void Program::Init() const
     {
-        SystemTasks::s_BlinkLedTaskA.Start();
-        SystemTasks::s_BlinkLedTaskB.Start();
+        SystemTasks::s_SoilSensorTask.Start();
+        //SystemTasks::s_BlinkLedTask.Start();
     }
 }

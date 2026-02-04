@@ -1,20 +1,25 @@
 #ifndef SYSTEM_TASKS_H
 #define SYSTEM_TASKS_H
 
+#include "Tasks/SoilSensorTask.h"
 #include "Tasks/BlinkLedTask.h"
 
 namespace gg
 {
-    constexpr uint8_t BLINK_GPIO_A{2};
-    constexpr uint32_t WAIT_TIME_A{1000};
-    constexpr uint8_t BLINK_GPIO_B{4};
-    constexpr uint32_t WAIT_TIME_B{700};
+    constexpr gpio_num_t SENSOR_GPIO{GPIO_NUM_4};
+    constexpr adc_channel_t ADC_CHANNEL{ADC_CHANNEL_0};
+    constexpr int DRY_VALUE{2770};
+    constexpr int WET_VALUE{430};
+    constexpr uint32_t STARTUP_DELAY{500};
+
+    constexpr gpio_num_t BLINK_GPIO{GPIO_NUM_2};
+    constexpr uint32_t WAIT_TIME{1000};
 
     // Register all tasks
     struct SystemTasks
     {
-        inline static BlinkLedTask s_BlinkLedTaskA{BLINK_GPIO_A, WAIT_TIME_A};
-        inline static BlinkLedTask s_BlinkLedTaskB{BLINK_GPIO_B, WAIT_TIME_B};
+        inline static SoilSensorTask s_SoilSensorTask{SENSOR_GPIO, ADC_CHANNEL, DRY_VALUE, WET_VALUE, STARTUP_DELAY, WAIT_TIME};
+        inline static BlinkLedTask s_BlinkLedTask{BLINK_GPIO, WAIT_TIME};
     };
 }
 #endif

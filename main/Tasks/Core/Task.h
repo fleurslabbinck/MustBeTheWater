@@ -1,10 +1,8 @@
 #ifndef TASK_H
 #define TASK_H
 
-extern "C" {
-    #include "freertos/FreeRTOS.h"
-    #include "freertos/task.h"
-}
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #include <atomic>
 

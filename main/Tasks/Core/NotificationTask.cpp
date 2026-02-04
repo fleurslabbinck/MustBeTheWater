@@ -3,7 +3,7 @@
 namespace gg
 {
     NotificationTask::NotificationTask(uint32_t waitTime)
-    : m_WaitTicks{pdMS_TO_TICKS(waitTime)}
+        : m_WaitTicks{pdMS_TO_TICKS(waitTime)}
     {}
 
     bool NotificationTask::WaitForWork()

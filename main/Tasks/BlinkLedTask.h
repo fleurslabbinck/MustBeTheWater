@@ -2,14 +2,14 @@
 #define BLINK_LED_TASK_H
 
 #include "Tasks/Core/NotificationTask.h"
-#include "Components/Led.h"
+#include "Components/PowerSupply.h"
 
 namespace gg
 {
     class BlinkLedTask final : public NotificationTask
     {
         public:
-        BlinkLedTask(uint8_t gpioPin, uint32_t waitTime);
+        BlinkLedTask(gpio_num_t gpioPin, uint32_t waitTime);
         BlinkLedTask(const BlinkLedTask&) = delete;
         BlinkLedTask(BlinkLedTask&&) = delete;
         BlinkLedTask& operator=(const BlinkLedTask&) = delete;
@@ -19,7 +19,7 @@ namespace gg
 
     private:
         bool m_Blink{false};
-        Led m_Led;
+        PowerSupply m_PowerSupply;
 
         void Execute() override;
     };

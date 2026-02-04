@@ -2,8 +2,8 @@
 
 namespace gg
 {
-    BlinkLedTask::BlinkLedTask(uint8_t gpioPin, uint32_t waitTime)
-    : NotificationTask(waitTime), m_Led{gpioPin}
+    BlinkLedTask::BlinkLedTask(gpio_num_t gpioPin, uint32_t waitTime)
+        : NotificationTask(waitTime), m_PowerSupply{gpioPin}
     {}
 
     void BlinkLedTask::Start()
@@ -15,15 +15,13 @@ namespace gg
     {
         if (m_Blink)
         {
-            m_Led.TurnOn();
+            m_PowerSupply.Enable();
         }
         else
         {
-            m_Led.TurnOff();
+            m_PowerSupply.Disable();
         }
 
         m_Blink = !m_Blink;
-
-        
     }
 }
