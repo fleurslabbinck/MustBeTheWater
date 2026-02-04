@@ -11,25 +11,22 @@ namespace gg
     const std::string Led::m_OffMessage{"LED OFF"};
 
     Led::Led(uint8_t gpioPin)
-    : m_GpioId{static_cast<gpio_num_t>(gpioPin)}
+    : Component(gpioPin)
     {
-        // Assemble pin ID
-        m_GpioIdMessage = "(GPIO " + std::to_string(m_GpioId) + ")";
-
         // Configure GPIO pin
-        gpio_reset_pin(m_GpioId);
-        gpio_set_direction(m_GpioId, GPIO_MODE_OUTPUT);
+        gpio_reset_pin(GetGpioId());
+        gpio_set_direction(GetGpioId(), GPIO_MODE_OUTPUT);
     }
 
     void Led::TurnOn()
     {
-        LogManager::Get().Log(m_GpioIdMessage, m_OnMessage);
-        gpio_set_level(m_GpioId, ON);
+        LogManager::Get().Log(GetGpioIdMessage(), m_OnMessage);
+        gpio_set_level(GetGpioId(), ON);
     }
 
     void Led::TurnOff()
     {
-        LogManager::Get().Log(m_GpioIdMessage, m_OffMessage);
-        gpio_set_level(m_GpioId, OFF);
+        LogManager::Get().Log(GetGpioIdMessage(), m_OffMessage);
+        gpio_set_level(GetGpioId(), OFF);
     }
 }

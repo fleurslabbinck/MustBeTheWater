@@ -1,12 +1,11 @@
 #ifndef BLINKER_H
 #define BLINKER_H
 
-#include <string>
-#include "driver/gpio.h"
+#include "Components/Component.h"
 
 namespace gg
 {
-    class Led final
+    class Led final : public Component
     {
     public:
         Led(uint8_t gpioPin);
@@ -21,10 +20,8 @@ namespace gg
 
     private:
         bool m_On{false};
-        const gpio_num_t m_GpioId{GPIO_NUM_NC};
         static const std::string m_OnMessage;
         static const std::string m_OffMessage;
-        std::string m_GpioIdMessage{};
     };
 }
 #endif
