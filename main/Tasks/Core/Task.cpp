@@ -10,44 +10,32 @@ namespace gg
     }
 
     // Call to create and start task pinned to specific core
-    void Task::Init(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core)
+    void Task::Init(const TaskAssembly& taskAssembly)
     {
-        BaseType_t coreIdx{static_cast<BaseType_t>(core)};
-        if (core == CoreSelect::None)
-        {
-            coreIdx = tskNO_AFFINITY;
-        }
-
         int createIdx{xTaskCreatePinnedToCore(
             TaskEntry, 
-            name, 
-            stackSize, 
+            taskAssembly.name, 
+            taskAssembly.stackSize, 
             this, 
-            priority, 
+            taskAssembly.priority, 
             &m_Handle, 
-            coreIdx)
+            taskAssembly.GetCoreId())
         };
 
         if (createIdx > 0)
         {
-            LogManager::Get().Log(std::string(name), "TASK CREATED SUCCESSFULLY");
+            LogManager::Get().Log(std::string(taskAssembly.name), "TASK CREATED SUCCESSFULLY");
         }
         else
         {
-            LogManager::Get().Log(std::string(name), "FAILED: COULD NOT ALLOCATE MEMORY");
+            LogManager::Get().Log(std::string(taskAssembly.name), "FAILED: COULD NOT ALLOCATE MEMORY");
         }
     }
-
-    // Call to create and start task
-    void Task::Init(const char* name, uint32_t stackSize, uint8_t priority)
-    {
-        Init(name, stackSize, priority, CoreSelect::None);
-    }
-
+    
     // C-style function that starts the task
-    void Task::TaskEntry(void* pvParameters)
+    void Task::TaskEntry(void* args)
     {
-        Task* self{static_cast<Task*>(pvParameters)};
+        Task* self{static_cast<Task*>(args)};
         self->Run();
     }
 

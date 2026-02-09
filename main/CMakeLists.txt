@@ -5,5 +5,5 @@ file(GLOB_RECURSE SRC_FILES "*.cpp")
 idf_component_register(
     SRCS    ${SRC_FILES}
     INCLUDE_DIRS .
-    REQUIRES driver esp_adc
+    #REQUIRES driver esp_adc    # Needed when MINIMAL_BUILD is enabled
 )

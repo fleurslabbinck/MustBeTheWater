@@ -1,10 +1,11 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include <atomic>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include <atomic>
+#include "Helpers/TaskAssembly.h"
 
 namespace gg
 {
@@ -13,13 +14,6 @@ namespace gg
     class Task
     {
     public:
-        enum class CoreSelect : int8_t
-        {
-            CoreZero = 0,
-            CoreOne = 1,
-            None = -1
-        };
-
         Task() = default;
         virtual ~Task();
         Task(const Task&) = delete;
@@ -34,8 +28,7 @@ namespace gg
         TaskHandle_t GetHandle() const {return m_Handle;}
 
     protected:
-        void Init(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core);
-        void Init(const char* name, uint32_t stackSize, uint8_t priority);
+        void Init(const TaskAssembly& taskAssembly);
         virtual void InitOnStart() {}
         virtual void Execute() = 0;
         virtual bool WaitForWork() = 0;
@@ -47,7 +40,7 @@ namespace gg
         std::atomic<bool> m_StopRequested{false};
         TaskHandle_t m_Handle{nullptr};
 
-        static void TaskEntry(void* pvParameters);
+        static void TaskEntry(void* args);
         void Run();
     };
 }

@@ -9,10 +9,22 @@
 
 namespace gg
 {
-    class SoilSensor final
+    struct SoilSensorAssembly
     {
+        SoilSensorAssembly(gpio_num_t gpio, adc_channel_t adcChannel, int dryRef, int wetRef, uint32_t poweringDelay)
+            : gpio{gpio}, adcChannel{adcChannel}, dryRef{dryRef}, wetRef{wetRef}, poweringDelay{poweringDelay}
+        {}
+        gpio_num_t gpio{};
+        adc_channel_t adcChannel{};
+        int dryRef{};
+        int wetRef{};
+        uint32_t poweringDelay{500};
+    };
+    
+    class SoilSensor final
+    {        
     public:
-        explicit SoilSensor(gpio_num_t gpio, adc_channel_t adcChannel, int dryReading, int wetReading, uint32_t startupDelay);
+        explicit SoilSensor(const SoilSensorAssembly& assembly);
         ~SoilSensor();
         SoilSensor(const SoilSensor&) = delete;
         SoilSensor(SoilSensor&&) = delete;
@@ -23,9 +35,9 @@ namespace gg
 
     private:
         const adc_channel_t m_AdcChannel{};
-        const int m_DryReading{};
-        const int m_WetReading{};
-        const TickType_t m_StartupDelay{};
+        const int m_DryRef{};
+        const int m_WetRef{};
+        const TickType_t m_PoweringDelay{};
         PowerSupply m_PowerSupply;
         adc_oneshot_unit_handle_t m_AdcHandle{nullptr};
         adc_cali_handle_t m_CalibrationHandle{nullptr};

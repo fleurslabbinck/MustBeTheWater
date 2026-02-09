@@ -7,18 +7,20 @@ namespace gg
 {
     static const char* TAG = "SoilSensor";
 
-    SoilSensorTask::SoilSensorTask(gpio_num_t gpio, adc_channel_t adcChannel, int dryReading, int wetReading, uint32_t startupDelay, uint32_t waitTime)
-        : PeriodicNotificationTask(waitTime), m_SoilSensor{gpio, adcChannel, dryReading, wetReading, startupDelay}
+    SoilSensorTask::SoilSensorTask(uint32_t waitTime)
+        : PeriodicNotificationTask(waitTime)
     {}
 
-    void SoilSensorTask::Start()
+    void SoilSensorTask::Start(const TaskAssembly& taskAssembly, const TaskAssembly& eventLoopTaskAssembly, const SoilSensorAssembly& soilSensorAssembly, int32_t queueSize)
     {
-        Init("Soil Sensor Task", 6144, 10);
+        Init(taskAssembly);
+        CreateEventLoop(eventLoopTaskAssembly, queueSize);
+        m_SoilSensor = std::make_unique<SoilSensor>(soilSensorAssembly);
     }
 
     void SoilSensorTask::Execute()
     {
-        float reading{m_SoilSensor.GetMoistureReading()};
+        float reading{m_SoilSensor->GetMoistureReading()};
         ESP_LOGI(TAG, "reading: %.2f", reading);
     }
 }

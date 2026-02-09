@@ -5,8 +5,12 @@
 
 namespace gg
 {
-    SoilSensor::SoilSensor(gpio_num_t gpio, adc_channel_t adcChannel, int dryReading, int wetReading, uint32_t startupDelay)
-        : m_AdcChannel{adcChannel}, m_DryReading{dryReading}, m_WetReading{wetReading}, m_StartupDelay{pdMS_TO_TICKS(startupDelay)}, m_PowerSupply{gpio}
+    SoilSensor::SoilSensor(const SoilSensorAssembly& assembly):
+        m_AdcChannel{assembly.adcChannel},
+        m_DryRef{assembly.dryRef},
+        m_WetRef{assembly.wetRef},
+        m_PoweringDelay{pdMS_TO_TICKS(assembly.poweringDelay)},
+        m_PowerSupply{assembly.gpio}
     {
         ConfigureAdc();
     }
@@ -50,7 +54,7 @@ namespace gg
     void SoilSensor::ApplyPower()
     {
         m_PowerSupply.Enable();
-        vTaskDelay(m_StartupDelay);
+        vTaskDelay(m_PoweringDelay); 
     }
 
     // Stops supplying current the sensor
@@ -83,7 +87,7 @@ namespace gg
 
     float SoilSensor::MapValue(int value)
     {
-        float mappedValue{(static_cast<float>(value - m_DryReading)) / (m_WetReading - m_DryReading)};
+        float mappedValue{(static_cast<float>(value - m_DryRef)) / (m_WetRef - m_DryRef)};
         return std::clamp(mappedValue, 0.f, 1.f);
     }
 }

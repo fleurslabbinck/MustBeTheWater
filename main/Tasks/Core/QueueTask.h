@@ -2,14 +2,11 @@
 #define QUEUE_TASK_H
 
 #include "Tasks/Core/Task.h"
-
-extern "C" {
-    #include "freertos/queue.h"
-}
+#include "freertos/queue.h"
 
 namespace gg
 {
-    template<class ItemType>
+    template<typename ItemType>
     class QueueTask : public Task
     {
     public:
