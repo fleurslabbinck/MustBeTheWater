@@ -11,7 +11,7 @@ namespace gg
     {
     public:
         Sender() = default;
-        ~Sender();
+        virtual ~Sender();
         Sender(const Sender&) = delete;
         Sender(Sender&&) = delete;
         Sender& operator=(const Sender&) = delete;

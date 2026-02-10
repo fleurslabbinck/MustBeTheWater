@@ -23,6 +23,7 @@ namespace gg
         void Start();
 
     private:
+        float m_Data{};
         std::unique_ptr<SoilSensor> m_SoilSensor{nullptr};
 
         void Execute() override;

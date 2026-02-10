@@ -1,7 +1,6 @@
 #include "SoilSensor.h"
 
 #include <algorithm>
-#include "Singletons/LogManager.h"
 
 namespace gg
 {
@@ -73,13 +72,11 @@ namespace gg
 
         // Read raw result
         ESP_ERROR_CHECK(adc_oneshot_read(m_AdcHandle, m_AdcChannel, &rawAdc));
-        LogManager::Get().Log("raw value: " + std::to_string(rawAdc) + "\n");
 
         RemovePower();
 
         // Calibrate the raw result;
         adc_cali_raw_to_voltage(m_CalibrationHandle, rawAdc, &adcValue);
-        LogManager::Get().Log("calibrated value: " + std::to_string(adcValue) + "\n");
 
         // Return workable mapped value
         return MapValue(adcValue);

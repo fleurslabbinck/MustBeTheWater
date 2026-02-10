@@ -39,7 +39,9 @@ namespace gg
 
     void SoilSensorTask::Execute()
     {
-        float reading{m_SoilSensor->GetMoistureReading()};
-        ESP_LOGI(TAG, "reading: %.2f", reading);
+        m_Data = m_SoilSensor->GetMoistureReading();
+        ESP_LOGI(TAG, "reading: %.2f", m_Data);
+
+        SendEvent<float>(m_Data, MAIN_EVENTS, static_cast<int32_t>(MainEvents::SensorData));
     }
 }

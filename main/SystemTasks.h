@@ -3,7 +3,7 @@
 
 #include "Tasks/SoilSensorTask.h"
 #include "Tasks/DataProcessTask.h"
-#include "Tasks/BlinkLedTask.h"
+#include "Tasks/DataProcessTask.h"
 
 namespace gg
 {
@@ -11,6 +11,7 @@ namespace gg
     struct SystemTasks
     {
         inline static SoilSensorTask s_SoilSensorTask{};
+        inline static DataProcessTask s_DataProcessTask{};
     };
 }
 #endif

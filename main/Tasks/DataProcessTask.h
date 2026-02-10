@@ -6,11 +6,21 @@
 
 namespace gg
 {
-    class DataProcessTask : public NotificationTask, public Listener
+    class DataProcessTask final : public NotificationTask, public Listener
     {
     public:
-        DataProcessTask();
-        ~DataProcessTask();
+        DataProcessTask() = default;
+        DataProcessTask(const DataProcessTask&) = delete;
+        DataProcessTask(DataProcessTask&&) = delete;
+        DataProcessTask& operator=(const DataProcessTask&) = delete;
+        DataProcessTask& operator=(DataProcessTask&&) = delete;
+
+        void Start();
+
+        static void OnSoilSensorData(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData);
+
+    private:
+        void Execute() override;
     };
 }
 #endif

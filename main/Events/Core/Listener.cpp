@@ -18,7 +18,8 @@ namespace gg
     }
     
     // Subscribe event handler to event
-    // esp_event_handler_t should be static function with args: void* event_handler_arg, esp_event_base_t event_base, int32_t event_id, void* event_data
+    // CALL AFTER EVENT LOOP CREATION!
+    // esp_event_handler_t should be static function with args: void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData
     SubscriptionHandle Listener::SubscribeToEvent(const Sender& sender, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
     {
         esp_event_loop_handle_t eventLoopHandle{sender.GetEventLoopHandle()};

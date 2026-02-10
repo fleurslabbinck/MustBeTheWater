@@ -11,7 +11,7 @@ namespace gg
     {
     public:
         Listener();
-        ~Listener();
+        virtual ~Listener();
         Listener(const Listener&) = delete;
         Listener(Listener&&) = delete;
         Listener& operator=(const Listener&) = delete;
