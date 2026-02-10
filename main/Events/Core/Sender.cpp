@@ -2,7 +2,7 @@
 
 namespace gg
 {
-    void Sender::PinToCore(CoreSelect core)
+    void Sender::PinEventLoopToCore(CoreSelect core)
     {
         m_Core = TaskConfig::GetCoreId(core);
     }

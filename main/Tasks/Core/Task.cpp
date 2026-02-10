@@ -11,7 +11,7 @@ namespace gg
 
     // Call to pin task to one core
     // Pinned to no core by default
-    void Task::PinToCore(CoreSelect core)
+    void Task::PinTaskToCore(CoreSelect core)
     {
         m_Core = TaskConfig::GetCoreId(core);
     }

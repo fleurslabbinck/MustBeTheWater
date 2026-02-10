@@ -17,7 +17,7 @@ namespace gg
         Sender& operator=(const Sender&) = delete;
         Sender& operator=(Sender&&) = delete;
 
-        void PinToCore(CoreSelect core);
+        void PinEventLoopToCore(CoreSelect core);
 
         esp_event_loop_handle_t GetEventLoopHandle() const {return m_EventLoopHandle;}
 

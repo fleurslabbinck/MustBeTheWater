@@ -21,7 +21,7 @@ namespace gg
         Task& operator=(const Task&) = delete;
         Task& operator=(Task&&) = delete;
 
-        void PinToCore(CoreSelect core);
+        void PinTaskToCore(CoreSelect core);
 
         void Suspend();
         void Resume();
