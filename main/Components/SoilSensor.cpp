@@ -5,7 +5,7 @@
 
 namespace gg
 {
-    SoilSensor::SoilSensor(const SoilSensorAssembly& assembly):
+    SoilSensor::SoilSensor(const SoilSensorConfig& assembly):
         m_AdcChannel{assembly.adcChannel},
         m_DryRef{assembly.dryRef},
         m_WetRef{assembly.wetRef},

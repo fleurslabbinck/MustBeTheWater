@@ -1,37 +1,30 @@
-#ifndef TASK_ASSEMBLY_H
-#define TASK_ASSEMBLY_H
+#ifndef TASK_CONFIG_H
+#define TASK_CONFIG_H
 
 #include <string>
 
 namespace gg
 {
-    enum class CoreSelect : int8_t
+    enum class CoreSelect : int
     {
         CoreZero = 0,
         CoreOne = 1,
-        None = -1
+        None = tskNO_AFFINITY
     };
 
-    struct TaskAssembly
+    struct TaskConfig
     {
-        TaskAssembly()
+        explicit TaskConfig()
             : name{std::string("Task: " + std::to_string(totalAssembled)).c_str()}
         {
             ++totalAssembled;
         }
 
-        TaskAssembly(const char* name, uint32_t stackSize, uint8_t priority, CoreSelect core)
-            : core{core}, priority(priority), stackSize{stackSize}, name{name}
-        {
-            ++totalAssembled;
-        }
-
-        CoreSelect core{CoreSelect::None};
         uint8_t priority{1};
         uint32_t stackSize{2048};
-        const char* name{};
+        const char* name;
 
-        UBaseType_t GetCoreId() const
+        static BaseType_t GetCoreId(CoreSelect core)
         {
             BaseType_t coreId{static_cast<BaseType_t>(core)};
             if (core == CoreSelect::None)

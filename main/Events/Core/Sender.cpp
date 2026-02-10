@@ -2,15 +2,20 @@
 
 namespace gg
 {
-    void Sender::CreateEventLoop(const TaskAssembly& taskAssembly, int32_t queueSize)
+    void Sender::PinToCore(CoreSelect core)
+    {
+        m_Core = TaskConfig::GetCoreId(core);
+    }
+
+    void Sender::CreateEventLoop(const TaskConfig& taskConfig, int32_t queueSize)
     {
         // Create event loop
         esp_event_loop_args_t eventLoopArgs{};
         eventLoopArgs.queue_size = queueSize;
-        eventLoopArgs.task_name = taskAssembly.name; // if not nullptr, a dedicated task will be assigned
-        eventLoopArgs.task_priority = taskAssembly.priority;
-        eventLoopArgs.task_stack_size = taskAssembly.stackSize;
-        eventLoopArgs.task_core_id = taskAssembly.GetCoreId();
+        eventLoopArgs.task_name = taskConfig.name; // if not nullptr, a dedicated task will be assigned
+        eventLoopArgs.task_priority = taskConfig.priority;
+        eventLoopArgs.task_stack_size = taskConfig.stackSize;
+        eventLoopArgs.task_core_id = m_Core;
 
         ESP_ERROR_CHECK(esp_event_loop_create(&eventLoopArgs, &m_EventLoopHandle));
     }

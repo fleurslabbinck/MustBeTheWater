@@ -18,7 +18,7 @@ namespace gg
         BlinkLedTask& operator=(const BlinkLedTask&) = delete;
         BlinkLedTask& operator=(BlinkLedTask&&) = delete;
 
-        void Start(const TaskAssembly& taskAssembly, gpio_num_t gpioPin);
+        void Start();
 
     private:
         bool m_Blink{false};

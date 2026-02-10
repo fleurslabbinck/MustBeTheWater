@@ -5,7 +5,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "Helpers/TaskAssembly.h"
+#include "Helpers/TaskConfig.h"
 
 namespace gg
 {
@@ -21,6 +21,8 @@ namespace gg
         Task& operator=(const Task&) = delete;
         Task& operator=(Task&&) = delete;
 
+        void PinToCore(CoreSelect core);
+
         void Suspend();
         void Resume();
         void End();
@@ -28,7 +30,7 @@ namespace gg
         TaskHandle_t GetHandle() const {return m_Handle;}
 
     protected:
-        void Init(const TaskAssembly& taskAssembly);
+        void CreateTask(const TaskConfig& taskConfig);
         virtual void InitOnStart() {}
         virtual void Execute() = 0;
         virtual bool WaitForWork() = 0;
@@ -37,6 +39,7 @@ namespace gg
         bool StopRequested() const {return m_StopRequested.load(std::memory_order_relaxed);}
     
     private:
+        BaseType_t m_Core{tskNO_AFFINITY};
         std::atomic<bool> m_StopRequested{false};
         TaskHandle_t m_Handle{nullptr};
 

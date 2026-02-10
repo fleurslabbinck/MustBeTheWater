@@ -3,7 +3,7 @@
 
 #include "esp_event.h"
 
-#include "Helpers/TaskAssembly.h"
+#include "Helpers/TaskConfig.h"
 
 namespace gg
 {
@@ -12,16 +12,17 @@ namespace gg
     public:
         Sender() = default;
         ~Sender();
-
         Sender(const Sender&) = delete;
         Sender(Sender&&) = delete;
         Sender& operator=(const Sender&) = delete;
         Sender& operator=(Sender&&) = delete;
 
+        void PinToCore(CoreSelect core);
+
         esp_event_loop_handle_t GetEventLoopHandle() const {return m_EventLoopHandle;}
 
     protected:
-        void CreateEventLoop(const TaskAssembly& taskAssembly, int32_t queueSize);
+        void CreateEventLoop(const TaskConfig& taskConfig, int32_t queueSize);
 
         // Ensure data will still exist when accessed be listener
         template<typename DataType>
@@ -38,6 +39,7 @@ namespace gg
         }
 
     private:
+        BaseType_t m_Core{tskNO_AFFINITY};
         esp_event_loop_handle_t m_EventLoopHandle{nullptr};
     };
 }

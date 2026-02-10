@@ -2,6 +2,7 @@
 
 namespace gg
 {
+    // Assign waitTime in ms
     PeriodicNotificationTask::PeriodicNotificationTask(uint32_t waitTime)
         : m_WaitTicks{pdMS_TO_TICKS(waitTime)}
     {}

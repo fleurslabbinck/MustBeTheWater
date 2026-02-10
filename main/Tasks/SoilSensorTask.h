@@ -14,13 +14,13 @@ namespace gg
     class SoilSensorTask final : public PeriodicNotificationTask, public Sender
     {
     public:
-        SoilSensorTask(uint32_t waitTime);
+        SoilSensorTask();
         SoilSensorTask(const SoilSensorTask&) = delete;
         SoilSensorTask(SoilSensorTask&&) = delete;
         SoilSensorTask& operator=(const SoilSensorTask&) = delete;
         SoilSensorTask& operator=(SoilSensorTask&&) = delete;
 
-        void Start(const TaskAssembly& taskAssembly, const TaskAssembly& eventLoopTaskAssembly, const SoilSensorAssembly& soilSensorAssembly, int32_t queueSize);
+        void Start();
 
     private:
         std::unique_ptr<SoilSensor> m_SoilSensor{nullptr};

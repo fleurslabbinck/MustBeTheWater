@@ -9,26 +9,33 @@ namespace gg
         m_Handle = nullptr;
     }
 
+    // Call to pin task to one core
+    // Pinned to no core by default
+    void Task::PinToCore(CoreSelect core)
+    {
+        m_Core = TaskConfig::GetCoreId(core);
+    }
+
     // Call to create and start task pinned to specific core
-    void Task::Init(const TaskAssembly& taskAssembly)
+    void Task::CreateTask(const TaskConfig& taskConfig)
     {
         int createIdx{xTaskCreatePinnedToCore(
             TaskEntry, 
-            taskAssembly.name, 
-            taskAssembly.stackSize, 
+            taskConfig.name, 
+            taskConfig.stackSize, 
             this, 
-            taskAssembly.priority, 
+            taskConfig.priority, 
             &m_Handle, 
-            taskAssembly.GetCoreId())
+            m_Core)
         };
 
         if (createIdx > 0)
         {
-            LogManager::Get().Log(std::string(taskAssembly.name), "TASK CREATED SUCCESSFULLY");
+            LogManager::Get().Log(std::string(taskConfig.name), "TASK CREATED SUCCESSFULLY");
         }
         else
         {
-            LogManager::Get().Log(std::string(taskAssembly.name), "FAILED: COULD NOT ALLOCATE MEMORY");
+            LogManager::Get().Log(std::string(taskConfig.name), "FAILED: COULD NOT ALLOCATE MEMORY");
         }
     }
     

@@ -8,10 +8,16 @@ namespace gg
         : NotificationTask(waitTime)
     {}
 
-    void BlinkLedTask::Start(const TaskAssembly& taskAssembly, gpio_num_t gpioPin)
+    void BlinkLedTask::Start()
     {
-        Init(taskAssembly);
-        m_PowerSupply = std::make_unique<PowerSupply>(gpioPin);
+        // Task creation
+        TaskConfig taskConfig{};
+        taskConfig.name = "Blink LED Task";
+        taskConfig.stackSize = 2048;
+        taskConfig.priority = 5;
+        CreateTask(taskConfig);
+
+        m_PowerSupply = std::make_unique<PowerSupply>(GPIO_NUM_2);
     }
 
     void BlinkLedTask::Execute()

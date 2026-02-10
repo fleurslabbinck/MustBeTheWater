@@ -10,8 +10,7 @@ namespace gg
     // Register all tasks
     struct SystemTasks
     {
-        inline static SoilSensorTask s_SoilSensorTask{1000};
-        inline static BlinkLedTask s_BlinkLedTask{1000};
+        inline static SoilSensorTask s_SoilSensorTask{};
     };
 }
 #endif
