@@ -11,11 +11,5 @@ namespace gg
     {
         SystemTasks::s_SoilSensorTask.Start();
         SystemTasks::s_DataProcessTask.Start();
-        SystemTasks::s_DataProcessTask.SubscribeToEvent(
-            SystemTasks::s_SoilSensorTask,
-            SystemTasks::s_DataProcessTask.OnSoilSensorData,
-            MAIN_EVENTS,
-            static_cast<int32_t>(MainEvents::SensorData)
-        );
     }
 }

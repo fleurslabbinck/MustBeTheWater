@@ -1,6 +1,7 @@
 #include "DataProcessTask.h"
 
 #include "esp_log.h"
+#include "Events/Events.h"
 
 namespace gg
 {
@@ -14,6 +15,9 @@ namespace gg
         taskConfig.stackSize = 2048;
         taskConfig.priority = 8;
         CreateTask(taskConfig);
+
+        // Subscribe to events
+        SubscribeToEvent(OnSoilSensorDataShared, MAIN_EVENTS, static_cast<int32_t>(MainEvents::ShareSensorData));
     }
 
     void DataProcessTask::Execute()
@@ -21,7 +25,7 @@ namespace gg
 
     }
 
-    void DataProcessTask::OnSoilSensorData(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData)
+    void DataProcessTask::OnSoilSensorDataShared(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData)
     {
         float data{*reinterpret_cast<float*>(eventData)};
         ESP_LOGI(TAG, "Event received: %.2f", data);

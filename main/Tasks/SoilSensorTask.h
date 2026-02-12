@@ -2,16 +2,14 @@
 #define SOIL_SENSOR_TASK_H
 
 #include <memory>
-
 #include "Tasks/Core/PeriodicNotificationTask.h"
 #include "Components/SoilSensor.h"
-#include "Events/Core/Sender.h"
 #include "Events/Core/Listener.h"
 #include "Events/Events.h"
 
 namespace gg
 {
-    class SoilSensorTask final : public PeriodicNotificationTask, public Sender
+    class SoilSensorTask final : public PeriodicNotificationTask
     {
     public:
         SoilSensorTask();

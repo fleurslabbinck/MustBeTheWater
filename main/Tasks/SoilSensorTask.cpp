@@ -1,6 +1,7 @@
 #include "SoilSensorTask.h"
 
 #include "esp_log.h"
+#include "Singletons/EventBus.h"
 #include "Components/SoilSensor.h"
 
 namespace gg
@@ -20,13 +21,6 @@ namespace gg
         taskConfig.priority = 10;
         CreateTask(taskConfig);
 
-        // Event loop creation
-        TaskConfig eventLoopConfig{};
-        eventLoopConfig.name = "Soil Sensor Event Loop";
-        eventLoopConfig.stackSize = 3084;
-        eventLoopConfig.priority = 5;
-        CreateEventLoop(eventLoopConfig, 5);
-
         // Soil sensor initialization
         SoilSensorConfig soilSensorConfig{};
         soilSensorConfig.gpio = GPIO_NUM_2;
@@ -42,6 +36,6 @@ namespace gg
         m_Data = m_SoilSensor->GetMoistureReading();
         ESP_LOGI(TAG, "reading: %.2f", m_Data);
 
-        SendEvent<float>(m_Data, MAIN_EVENTS, static_cast<int32_t>(MainEvents::SensorData));
+        EventBus::Get().PostEvent<float>(m_Data, MAIN_EVENTS, static_cast<int32_t>(MainEvents::ShareSensorData));
     }
 }

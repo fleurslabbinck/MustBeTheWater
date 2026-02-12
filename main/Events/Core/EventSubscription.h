@@ -9,17 +9,16 @@ namespace gg
 
     struct EventSubscription
     {
-        explicit EventSubscription(esp_event_loop_handle_t eventLoopHandle, esp_event_base_t eventBase, int32_t eventId)
-            : eventId{eventId}, eventBase{eventBase}, eventLoopHandle{eventLoopHandle}
+        explicit EventSubscription(esp_event_base_t eventBase, int32_t eventId)
+            : eventId{eventId}, eventBase{eventBase}
         {
             AssignSubscriptionHandle();
         }
-
+        
         SubscriptionHandle subscriptionHandle{};
         int32_t eventId{};
         esp_event_base_t eventBase{};
         esp_event_handler_instance_t instance{nullptr};
-        esp_event_loop_handle_t eventLoopHandle{nullptr};
 
     private:
         inline static uint8_t totalSubscriptions{};
