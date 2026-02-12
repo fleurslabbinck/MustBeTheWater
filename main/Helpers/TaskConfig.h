@@ -15,7 +15,11 @@ namespace gg
     struct TaskConfig
     {
         explicit TaskConfig()
-            : name{std::string("Task: " + std::to_string(totalAssembled)).c_str()}
+            : TaskConfig(std::string("Task: " + std::to_string(totalAssembled)))
+        {}
+
+        explicit TaskConfig(const std::string& name)
+            : name{name.c_str()}
         {
             ++totalAssembled;
         }
