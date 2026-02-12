@@ -16,11 +16,13 @@ namespace gg
         NotificationTask& operator=(const NotificationTask&) = delete;
         NotificationTask& operator=(NotificationTask&&) = delete;
 
+    protected:
+        void Unblock() override;
+        
     private:
         TickType_t m_WaitTicks{portMAX_DELAY};
 
         bool WaitForWork() override;
-        void Unblock() override;
     };
 }
 #endif

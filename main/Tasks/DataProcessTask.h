@@ -17,10 +17,10 @@ namespace gg
 
         void Start();
 
-        static void OnSoilSensorDataShared(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData);
-
     private:
         void Execute() override;
+
+        static void OnSoilSensorDataShared(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData);
     };
 }
 #endif

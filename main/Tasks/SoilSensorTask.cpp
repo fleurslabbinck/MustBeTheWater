@@ -1,16 +1,11 @@
 #include "SoilSensorTask.h"
 
 #include "esp_log.h"
-#include "Singletons/EventBus.h"
-#include "Components/SoilSensor.h"
+#include "Events/Events.h"
 
 namespace gg
 {
     static const char* TAG = "SoilSensor";
-
-    SoilSensorTask::SoilSensorTask()
-        : PeriodicNotificationTask(1000)
-    {}
 
     void SoilSensorTask::Start()
     {
@@ -29,6 +24,9 @@ namespace gg
         soilSensorConfig.wetRef = 430;
         soilSensorConfig.poweringDelay = 500;
         m_SoilSensor = std::make_unique<SoilSensor>(soilSensorConfig);
+
+        // Subscribe to events
+        SubscribeToEvent(OnSoilSensorDataRequested, MAIN_EVENTS, static_cast<int32_t>(MainEvents::RequestSensorData));
     }
 
     void SoilSensorTask::Execute()
@@ -37,5 +35,17 @@ namespace gg
         ESP_LOGI(TAG, "reading: %.2f", m_Data);
 
         EventBus::Get().PostEvent<float>(m_Data, MAIN_EVENTS, static_cast<int32_t>(MainEvents::ShareSensorData));
+    }
+
+    void SoilSensorTask::WakeForReading()
+    {
+        m_PerformReading = true;
+        Unblock();
+    }
+
+    void SoilSensorTask::OnSoilSensorDataRequested(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData)
+    {
+        SoilSensorTask* self{static_cast<SoilSensorTask*>(eventHandlerArg)};
+        self->WakeForReading();
     }
 }

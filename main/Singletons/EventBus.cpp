@@ -1,5 +1,7 @@
 #include "EventBus.h"
 
+#include "Events/Core/Listener.h"
+
 namespace gg
 {
     EventBus::EventBus()
@@ -22,7 +24,7 @@ namespace gg
         m_EventLoopHandle = nullptr;
     }
 
-    EventSubscription EventBus::Subscribe(esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
+    EventSubscription EventBus::Subscribe(Listener* listener, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
     {
         EventSubscription subscription{eventBase, eventId};
         ESP_ERROR_CHECK(esp_event_handler_instance_register_with(

@@ -1,6 +1,7 @@
 #include "Program.h"
 
 #include "SystemTasks.h"
+#include "Events/Events.h"
 
 ESP_EVENT_DEFINE_BASE(MAIN_EVENTS);
 
