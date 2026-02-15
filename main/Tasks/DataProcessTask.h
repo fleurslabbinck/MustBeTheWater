@@ -3,9 +3,16 @@
 
 #include "Tasks/Core/NotificationTask.h"
 #include "Events/Core/Listener.h"
+#include "Helpers/RingBuffer.h"
 
 namespace gg
 {
+    struct SampleData
+    {
+        uint8_t amount{};
+        uint32_t delay{};
+    };
+
     class DataProcessTask final : public NotificationTask, public Listener
     {
     public:
@@ -16,8 +23,12 @@ namespace gg
         DataProcessTask& operator=(DataProcessTask&&) = delete;
 
         void Start();
+        void InitiateProgram();
 
     private:
+        SampleData m_SampleData{};
+        RingBuffer<float, 10> m_DataQueue{};
+
         void Execute() override;
 
         static void OnSoilSensorDataShared(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData);

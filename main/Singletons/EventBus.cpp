@@ -24,7 +24,7 @@ namespace gg
         m_EventLoopHandle = nullptr;
     }
 
-    EventSubscription EventBus::Subscribe(Listener* listener, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
+    EventSubscription EventBus::Subscribe(void* object, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
     {
         EventSubscription subscription{eventBase, eventId};
         ESP_ERROR_CHECK(esp_event_handler_instance_register_with(
@@ -32,7 +32,7 @@ namespace gg
             eventBase,
             eventId,
             eventHandler,
-            this,
+            object,
             &subscription.instance)
         );
 

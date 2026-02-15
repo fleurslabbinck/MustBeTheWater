@@ -28,7 +28,11 @@ namespace gg
         SoilSensor& operator=(const SoilSensor&) = delete;
         SoilSensor& operator=(SoilSensor&&) = delete;
 
-        float GetMoistureReading();
+        void ApplyPower();
+        void RemovePower();
+
+        TickType_t GetPoweringDelay() const {return m_PoweringDelay;}
+        float GetSample();
 
     private:
         const adc_channel_t m_AdcChannel{};
@@ -41,9 +45,6 @@ namespace gg
 
         void ConfigureAdc();
         void CalibrationSetup(const adc_oneshot_unit_init_cfg_t& handleConfig, const adc_oneshot_chan_cfg_t& channelConfig);
-
-        void ApplyPower();
-        void RemovePower();
 
         float MapValue(int value);
     };

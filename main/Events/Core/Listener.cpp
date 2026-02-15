@@ -20,9 +20,9 @@ namespace gg
     
     // Subscribe event handler to event
     // esp_event_handler_t should be static function with args: void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData
-    SubscriptionHandle Listener::SubscribeToEvent(esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
+    SubscriptionHandle Listener::SubscribeToEvent(void* object, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId)
     {
-        EventSubscription subscription{EventBus::Get().Subscribe(this, eventHandler, eventBase, eventId)};
+        EventSubscription subscription{EventBus::Get().Subscribe(object, eventHandler, eventBase, eventId)};
         m_EventSubscriptions.push_back(subscription);
         return m_EventSubscriptions.back().subscriptionHandle;
     }

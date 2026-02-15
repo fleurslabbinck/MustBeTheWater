@@ -17,7 +17,7 @@ namespace gg
         Listener& operator=(Listener&&) = delete;
 
     protected:
-        SubscriptionHandle SubscribeToEvent(esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId);
+        SubscriptionHandle SubscribeToEvent(void* object, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId);
         void UnsubscribeFromEvent(SubscriptionHandle subscriptionHandle);
 
     private:

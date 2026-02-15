@@ -15,10 +15,26 @@ namespace gg
         return !StopRequested();
     }
 
+    // Reset delay time to max delay
+    // If task handle is valid, task will be unblocked to be delayed with new time
+    void NotificationTask::ResetWaitTime()
+    {
+        m_WaitTicks = portMAX_DELAY;
+        Unblock();
+    }
+
+    // Call to change time to delay task
+    // If task handle is valid, task will be unblocked to be delayed with new time
+    void NotificationTask::ChangeWaitTime(uint32_t waitTime)
+    {
+        m_WaitTicks = pdMS_TO_TICKS(waitTime);
+        Unblock();
+    }
+
     void NotificationTask::Unblock()
     {
         const TaskHandle_t handle{GetHandle()};
-        if (GetHandle())
+        if (handle)
         {
             xTaskNotify(handle, 0, eNoAction);
         }

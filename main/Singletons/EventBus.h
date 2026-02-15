@@ -39,7 +39,7 @@ namespace gg
 
         esp_event_loop_handle_t m_EventLoopHandle{nullptr};
 
-        EventSubscription Subscribe(Listener* listener, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId);
+        EventSubscription Subscribe(void* object, esp_event_handler_t eventHandler, esp_event_base_t eventBase, int32_t eventId);
         void Unsubscribe(const EventSubscription& subscription);
 };
 }

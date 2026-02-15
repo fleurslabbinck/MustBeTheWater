@@ -17,6 +17,8 @@ namespace gg
         NotificationTask& operator=(NotificationTask&&) = delete;
 
     protected:
+        void ResetWaitTime();
+        void ChangeWaitTime(uint32_t waitTime);
         void Unblock() override;
         
     private:

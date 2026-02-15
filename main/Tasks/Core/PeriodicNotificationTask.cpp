@@ -34,7 +34,7 @@ namespace gg
     void PeriodicNotificationTask::Unblock()
     {
         const TaskHandle_t handle{GetHandle()};
-        if (GetHandle())
+        if (handle)
         {
             xTaskNotify(handle, 0, eNoAction);
         }

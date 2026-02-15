@@ -49,11 +49,11 @@ namespace gg
         ESP_ERROR_CHECK(adc_cali_create_scheme_line_fitting(&calibrationConfig, &m_CalibrationHandle));
     }
 
-    // Enables powers supply and delays to allow senser startup
+    // Enables powers supply
+    // ENSURE A DELAY BEFORE SAMPLING
     void SoilSensor::ApplyPower()
     {
         m_PowerSupply.Enable();
-        vTaskDelay(m_PoweringDelay); 
     }
 
     // Stops supplying current the sensor
@@ -63,17 +63,14 @@ namespace gg
     }
 
     // Executes a sensor reading and returns a mapped result
-    float SoilSensor::GetMoistureReading()
+    // Power supply should be applied before and removed after reading
+    float SoilSensor::GetSample()
     {
         int rawAdc{};
         int adcValue{};
 
-        ApplyPower();
-
         // Read raw result
         ESP_ERROR_CHECK(adc_oneshot_read(m_AdcHandle, m_AdcChannel, &rawAdc));
-
-        RemovePower();
 
         // Calibrate the raw result;
         adc_cali_raw_to_voltage(m_CalibrationHandle, rawAdc, &adcValue);
