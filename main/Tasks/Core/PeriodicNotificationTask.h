@@ -20,7 +20,7 @@ namespace gg
         TickType_t m_LastWake{};
 
         void InitOnStart() override;
-        bool WaitForWork() override;
+        void Wait() override;
         void Unblock() override;
     };
 }

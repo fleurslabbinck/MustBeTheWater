@@ -12,7 +12,5 @@ namespace gg
     {
         SystemTasks::s_SoilSensorTask.Start();
         SystemTasks::s_DataProcessTask.Start();
-
-        SystemTasks::s_DataProcessTask.InitiateProgram();
     }
 }

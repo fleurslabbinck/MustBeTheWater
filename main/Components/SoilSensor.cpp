@@ -8,7 +8,7 @@ namespace gg
         m_AdcChannel{assembly.adcChannel},
         m_DryRef{assembly.dryRef},
         m_WetRef{assembly.wetRef},
-        m_PoweringDelay{pdMS_TO_TICKS(assembly.poweringDelay)},
+        m_PoweringDelay{assembly.poweringDelay},
         m_PowerSupply{assembly.gpio}
     {
         ConfigureAdc();

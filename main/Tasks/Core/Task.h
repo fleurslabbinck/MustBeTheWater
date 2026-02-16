@@ -30,10 +30,10 @@ namespace gg
         TaskHandle_t GetHandle() const {return m_Handle;}
 
     protected:
-        void CreateTask(const TaskConfig& taskConfig);
+        void CreateTask(const char* tag, const TaskConfig& taskConfig);
         virtual void InitOnStart() {}
         virtual void Execute() = 0;
-        virtual bool WaitForWork() = 0;
+        virtual void Wait() = 0;
         virtual void Unblock() = 0;
 
         bool StopRequested() const {return m_StopRequested.load(std::memory_order_relaxed);}

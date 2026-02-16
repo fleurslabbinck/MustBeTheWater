@@ -1,6 +1,6 @@
 #include "Task.h"
 
-#include "Singletons/LogManager.h"
+#include "esp_log.h"
 
 namespace gg
 {
@@ -17,7 +17,7 @@ namespace gg
     }
 
     // Call to create and start task pinned to specific core
-    void Task::CreateTask(const TaskConfig& taskConfig)
+    void Task::CreateTask(const char* tag, const TaskConfig& taskConfig)
     {
         int createIdx{xTaskCreatePinnedToCore(
             TaskEntry, 
@@ -31,11 +31,11 @@ namespace gg
 
         if (createIdx > 0)
         {
-            LogManager::Get().Log(std::string(taskConfig.name), "TASK CREATED SUCCESSFULLY");
+            ESP_LOGI(tag, "TASK CREATED SUCCESSFULLY");
         }
         else
         {
-            LogManager::Get().Log(std::string(taskConfig.name), "FAILED: COULD NOT ALLOCATE MEMORY");
+            ESP_LOGI(tag, "TASK CREATION FAILED: COULD NOT ALLOCATE MEMORY");
         }
     }
     
@@ -53,11 +53,8 @@ namespace gg
 
         while (!StopRequested())
         {
-            // Wait and check if task is ready to execute
-            if (WaitForWork())
-            {
-                Execute();
-            }
+            Execute();
+            Wait();
         }
 
         // Clean up when task has ended

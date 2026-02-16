@@ -13,8 +13,14 @@ namespace gg
         m_LastWake = xTaskGetTickCount();
     }
 
-    bool PeriodicNotificationTask::WaitForWork()
+    void PeriodicNotificationTask::Wait()
     {
+        // Return if stop was requested while task execution
+        if (StopRequested())
+        {
+            return;
+        }
+
         // Get current and calculate elapsed time
         const TickType_t now{xTaskGetTickCount()};
         const TickType_t elapsed{now - m_LastWake};
@@ -27,8 +33,6 @@ namespace gg
 
         // Update wake time
         m_LastWake = xTaskGetTickCount();
-
-        return !StopRequested();
     }
 
     void PeriodicNotificationTask::Unblock()

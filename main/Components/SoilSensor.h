@@ -31,14 +31,14 @@ namespace gg
         void ApplyPower();
         void RemovePower();
 
-        TickType_t GetPoweringDelay() const {return m_PoweringDelay;}
+        uint32_t GetPoweringDelay() const {return m_PoweringDelay;}
         float GetSample();
 
     private:
         const adc_channel_t m_AdcChannel{};
         const int m_DryRef{};
         const int m_WetRef{};
-        const TickType_t m_PoweringDelay{};
+        const uint32_t m_PoweringDelay{};
         PowerSupply m_PowerSupply;
         adc_oneshot_unit_handle_t m_AdcHandle{nullptr};
         adc_cali_handle_t m_CalibrationHandle{nullptr};

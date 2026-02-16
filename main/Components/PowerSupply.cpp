@@ -1,11 +1,13 @@
 #include "PowerSupply.h"
 
-#include "Singletons/LogManager.h"
+#include "esp_log.h"
+
+static const char* TAG = "Powersupply";
 
 namespace gg
 {
     PowerSupply::PowerSupply(gpio_num_t gpio)
-        : m_Gpio{gpio}, m_GpioId{"(GPIO " + std::to_string(m_Gpio) + ")"}
+        : m_Gpio{gpio}
     {
         ConfigureGpio();
     }
@@ -18,13 +20,13 @@ namespace gg
 
     void PowerSupply::Enable()
     {
-        LogManager::Get().Log(GetGpioId(), "GPIO HIGH");
+        ESP_LOGI(TAG, "GPIO %d: HIGH", m_Gpio);
         ESP_ERROR_CHECK(gpio_set_level(GetGpio(), 1));
     }
 
     void PowerSupply::Disable()
     {
-        LogManager::Get().Log(GetGpioId(), "GPIO LOW");
+        ESP_LOGI(TAG, "GPIO %d: LOW", m_Gpio);
         ESP_ERROR_CHECK(gpio_set_level(GetGpio(), 0));
     }
 }

@@ -23,7 +23,6 @@ namespace gg
         DataProcessTask& operator=(DataProcessTask&&) = delete;
 
         void Start();
-        void InitiateProgram();
 
     private:
         SampleData m_SampleData{};

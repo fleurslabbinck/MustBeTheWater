@@ -24,7 +24,7 @@ namespace gg
     private:
         TickType_t m_WaitTicks{portMAX_DELAY};
 
-        bool WaitForWork() override;
+        void Wait() override;
     };
 }
 #endif

@@ -2,6 +2,7 @@
 #define SOIL_SENSOR_TASK_H
 
 #include <memory>
+#include <atomic>
 #include <queue>
 #include "Tasks/Core/NotificationTask.h"
 #include "Components/SoilSensor.h"
@@ -32,9 +33,10 @@ namespace gg
     private:
         TaskState m_TaskState{TaskState::Idle};
         float m_Data{};
+        std::atomic<bool> m_Sample{false};
         std::unique_ptr<SoilSensor> m_SoilSensor{nullptr};
         std::queue<uint32_t> m_SampleQueue{};
-        SemaphoreHandle_t m_QueueLock{nullptr};
+        SemaphoreHandle_t m_Lock{nullptr};
 
         void Execute() override;
         void PrepareForSampling(const SampleData& sampleData);
