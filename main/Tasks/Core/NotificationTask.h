@@ -17,14 +17,14 @@ namespace gg
         NotificationTask& operator=(NotificationTask&&) = delete;
 
     protected:
-        void ResetWaitTime();
-        void ChangeWaitTime(uint32_t waitTime);
-        void Unblock() override;
-        
-    private:
         TickType_t m_WaitTicks{portMAX_DELAY};
 
-        void Wait() override;
+        void Unblock() override;
+        void ChangeWaitTime(uint32_t waitTime);
+        void ResetWaitTime();
+        
+    private:
+        virtual void Wait() override;
     };
 }
 #endif

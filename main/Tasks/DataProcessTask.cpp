@@ -5,7 +5,7 @@
 
 namespace gg
 {
-    static const char* TAG = "Data Processing";
+    static const char* TAG = "Data Processing Task";
     
     void DataProcessTask::Start()
     {
@@ -21,6 +21,8 @@ namespace gg
     }
     void DataProcessTask::Execute()
     {
+        ESP_LOGI(TAG, "Executing");
+
         m_SampleData.amount = 10;
         m_SampleData.delay = 100;
         EventBus::Get().PostEvent<SampleData>(m_SampleData, MAIN_EVENTS, static_cast<int32_t>(MainEvents::RequestSensorData));
@@ -28,7 +30,7 @@ namespace gg
 
     void DataProcessTask::OnSoilSensorDataShared(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData)
     {
-        float data{*reinterpret_cast<float*>(eventData)};
-        ESP_LOGI(TAG, "Event received: %.2f", data);
+        //float data{*reinterpret_cast<float*>(eventData)};
+        //ESP_LOGI(TAG, "Event received: %.2f", data);
     }
 }

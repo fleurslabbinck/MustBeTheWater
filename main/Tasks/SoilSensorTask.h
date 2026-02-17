@@ -4,23 +4,16 @@
 #include <memory>
 #include <atomic>
 #include <queue>
-#include "Tasks/Core/NotificationTask.h"
-#include "Components/SoilSensor.h"
+#include <optional>
+#include "Tasks/Core/StateMachineTask.h"
 #include "Events/Core/Listener.h"
+#include "Components/SoilSensor.h"
 #include "DataProcessTask.h"
 
 namespace gg
 {
-    class SoilSensorTask final : public NotificationTask, public Listener
+    class SoilSensorTask final : public StateMachineTask, public Listener
     {
-        enum TaskState : uint8_t
-        {
-            Idle,
-            Preparing,
-            Ready,
-            Resetting
-        };
-
     public:
         SoilSensorTask() = default;
         SoilSensorTask(const SoilSensorTask&) = delete;
@@ -29,18 +22,24 @@ namespace gg
         SoilSensorTask& operator=(SoilSensorTask&&) = delete;
 
         void Start();
+        void SetInitiateSamplingFlag() {m_InitiateSampling.store(true, std::memory_order_relaxed);}
+        void ResetInitiateSamplingFlag() {m_InitiateSampling.store(false, std::memory_order_relaxed);}
+        void Sample();
+
+        bool InitiateSampling() const {return m_InitiateSampling.load(std::memory_order_relaxed);}
+        SoilSensor* GetSoilSensor() const {return m_SoilSensor.get();}
+        std::optional<uint32_t> TryGetSampleQueueItem();
 
     private:
-        TaskState m_TaskState{TaskState::Idle};
+        static constexpr int32_t m_MaxLockWaitTime{5000};
         float m_Data{};
-        std::atomic<bool> m_Sample{false};
+        std::atomic<bool> m_InitiateSampling{false};
         std::unique_ptr<SoilSensor> m_SoilSensor{nullptr};
         std::queue<uint32_t> m_SampleQueue{};
         SemaphoreHandle_t m_Lock{nullptr};
 
-        void Execute() override;
+        void InitializeStateMachine() override;
         void PrepareForSampling(const SampleData& sampleData);
-        void Sample();
 
         static void OnSoilSensorDataRequested(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData);
     };

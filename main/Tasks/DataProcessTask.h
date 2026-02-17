@@ -1,7 +1,7 @@
 #ifndef DATA_PROCESS_TASK_H
 #define DATA_PROCESS_TASK_H
 
-#include "Tasks/Core/NotificationTask.h"
+#include "Tasks/Core/PeriodicNotificationTask.h"
 #include "Events/Core/Listener.h"
 #include "Helpers/RingBuffer.h"
 
@@ -13,7 +13,7 @@ namespace gg
         uint32_t delay{};
     };
 
-    class DataProcessTask final : public NotificationTask, public Listener
+    class DataProcessTask final : public PeriodicNotificationTask, public Listener
     {
     public:
         DataProcessTask() = default;
