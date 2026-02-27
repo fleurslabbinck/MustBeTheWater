@@ -7,10 +7,10 @@
 
 namespace gg
 {
-    struct SampleData
+    struct SampleSession
     {
-        uint8_t amount{};
-        uint32_t delay{};
+        uint8_t remainingSamples{};
+        uint32_t delayBetweenSamplesMs{};
     };
 
     class DataProcessTask final : public PeriodicNotificationTask, public Listener
@@ -25,7 +25,8 @@ namespace gg
         void Start();
 
     private:
-        SampleData m_SampleData{};
+        SampleSession m_SampleData{};
+        SemaphoreHandle_t m_Lock{nullptr};
         RingBuffer<float, 10> m_DataQueue{};
 
         void Execute() override;

@@ -22,6 +22,7 @@ namespace gg
 
         void SwitchState(State newState, uint32_t delay);
         void SwitchState(State newState);
+        void SetDelay(uint32_t delay);
 
     protected:
         // Call before task creation

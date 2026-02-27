@@ -2,8 +2,6 @@
 #define SOIL_SENSOR_TASK_H
 
 #include <memory>
-#include <atomic>
-#include <queue>
 #include <optional>
 #include "Tasks/Core/StateMachineTask.h"
 #include "Events/Core/Listener.h"
@@ -15,31 +13,30 @@ namespace gg
     class SoilSensorTask final : public StateMachineTask, public Listener
     {
     public:
-        SoilSensorTask() = default;
+        SoilSensorTask();
         SoilSensorTask(const SoilSensorTask&) = delete;
         SoilSensorTask(SoilSensorTask&&) = delete;
         SoilSensorTask& operator=(const SoilSensorTask&) = delete;
         SoilSensorTask& operator=(SoilSensorTask&&) = delete;
 
         void Start();
-        void SetInitiateSamplingFlag() {m_InitiateSampling.store(true, std::memory_order_relaxed);}
-        void ResetInitiateSamplingFlag() {m_InitiateSampling.store(false, std::memory_order_relaxed);}
+        void AssignActiveSampleSession();
         void Sample();
+        void PowerOnSoilSensor() const {m_SoilSensor->ApplyPower();}
+        void PowerOffSoilSensor() const {m_SoilSensor->RemovePower();}
 
-        bool InitiateSampling() const {return m_InitiateSampling.load(std::memory_order_relaxed);}
-        SoilSensor* GetSoilSensor() const {return m_SoilSensor.get();}
-        std::optional<uint32_t> TryGetSampleQueueItem();
+        bool HasRemainingSampleSessions() const;
+        uint32_t GetSoilSensorPoweringDelay() const {return m_SoilSensor->GetPoweringDelay();}
+        std::optional<uint32_t> TryGetSampleSessionDelay() const;
 
     private:
-        static constexpr int32_t m_MaxLockWaitTime{5000};
-        float m_Data{};
-        std::atomic<bool> m_InitiateSampling{false};
+        float m_SoilSensorOutput{};
+        std::optional<SampleSession> m_ActiveSampleSession{std::nullopt};
         std::unique_ptr<SoilSensor> m_SoilSensor{nullptr};
-        std::queue<uint32_t> m_SampleQueue{};
-        SemaphoreHandle_t m_Lock{nullptr};
+        QueueHandle_t m_SampleSessionQueue{nullptr};
 
         void InitializeStateMachine() override;
-        void PrepareForSampling(const SampleData& sampleData);
+        void PrepareSampleSession(const SampleSession& sampleSession);
 
         static void OnSoilSensorDataRequested(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData);
     };

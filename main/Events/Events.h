@@ -11,7 +11,7 @@ namespace gg
     enum class MainEvents : int32_t
     {
         RequestSensorData,
-        ShareSensorData,
+        ShareSensorOutput,
     };
 }
 #endif

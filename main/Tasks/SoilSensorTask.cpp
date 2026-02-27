@@ -12,6 +12,10 @@ namespace gg
 {
     static const char* TAG = "Soil Sensor Task";
 
+    SoilSensorTask::SoilSensorTask()
+        : m_SampleSessionQueue{xQueueCreate(5, sizeof(SampleSession))}
+    {}
+
     void SoilSensorTask::Start()
     {
         // Initialize states first
@@ -33,9 +37,6 @@ namespace gg
         soilSensorConfig.poweringDelay = 500;
         m_SoilSensor = std::make_unique<SoilSensor>(soilSensorConfig);
 
-        // Initialize semaphore
-        m_Lock = xSemaphoreCreateMutex();
-
         // Subscribe event handlers to their event
         SubscribeToEvent(this, OnSoilSensorDataRequested, MAIN_EVENTS, static_cast<int32_t>(MainEvents::RequestSensorData));
     }
@@ -53,55 +54,53 @@ namespace gg
     }
 
     // Wake task to allow sensor reading to happen
-    void SoilSensorTask::PrepareForSampling(const SampleData& sampleData)
+    void SoilSensorTask::PrepareSampleSession(const SampleSession& sampleSession)
     {
-        SetInitiateSamplingFlag();
-
-        // Lock semaphore for a max amount of wait time
-        xSemaphoreTake(m_Lock, pdMS_TO_TICKS(m_MaxLockWaitTime));
-
-        for (uint8_t i{}; i < sampleData.amount; ++i)
-        {
-            m_SampleQueue.push(sampleData.delay);
-        }
-
-        // Release semaphore
-        xSemaphoreGive(m_Lock);
+        // Add sample session to queue
+        xQueueSend(m_SampleSessionQueue, &sampleSession, 0);
 
         // Wake task to start sampling behavior
         Unblock();
-
     }
 
-    // Attempts to get the front item from the sample queue
-    std::optional<uint32_t> SoilSensorTask::TryGetSampleQueueItem()
+    // Checks if there is at least 1 sample session in the queue
+    bool SoilSensorTask::HasRemainingSampleSessions() const
     {
-        std::optional<uint32_t> sampleQueueItem{};
-
-        // Lock semaphore for a max amount of wait time
-        xSemaphoreTake(m_Lock, pdMS_TO_TICKS(m_MaxLockWaitTime));
-
-        if (!m_SampleQueue.empty())
-        {
-            sampleQueueItem = m_SampleQueue.front();
-            m_SampleQueue.pop();
-        }
-        else
-        {
-            sampleQueueItem = std::nullopt;
-        }
-
-        // Release semaphore
-        xSemaphoreGive(m_Lock);
-
-        return sampleQueueItem;
+        return uxQueueMessagesWaiting(m_SampleSessionQueue) > 0;
     }
 
-    // Get a sample from the soil sensor
+    // Assigns the front item from the sample queue to active sample session
+    void SoilSensorTask::AssignActiveSampleSession()
+    {
+        SampleSession newSession{};
+        xQueueReceive(m_SampleSessionQueue, &newSession, 0);
+        m_ActiveSampleSession = newSession;
+    }
+
+    // Get a sample from the soil sensor and update active sample session status
     void SoilSensorTask::Sample()
     {
-        m_Data = m_SoilSensor->GetSample();
-        EventBus::Get().PostEvent<float>(m_Data, MAIN_EVENTS, static_cast<int32_t>(MainEvents::ShareSensorData));
+        m_SoilSensorOutput = m_SoilSensor->GetSample();
+
+        // Decrement remaining samples and reset active session when decremented to 0
+        --m_ActiveSampleSession.value().remainingSamples;
+        if (m_ActiveSampleSession.value().remainingSamples == 0)
+        {
+            m_ActiveSampleSession = std::nullopt;
+        }
+
+        EventBus::Get().PostEvent<float>(m_SoilSensorOutput, MAIN_EVENTS, static_cast<int32_t>(MainEvents::ShareSensorOutput));
+    }
+
+    // Try to get delay between samples from active sample session
+    std::optional<uint32_t> SoilSensorTask::TryGetSampleSessionDelay() const
+    {
+        if (m_ActiveSampleSession.has_value())
+        {
+            return m_ActiveSampleSession.value().delayBetweenSamplesMs;
+        }
+
+        return std::nullopt;
     }
 
     void SoilSensorTask::OnSoilSensorDataRequested(void* eventHandlerArg, esp_event_base_t eventBase, int32_t eventId, void* eventData)
@@ -110,11 +109,11 @@ namespace gg
         SoilSensorTask* self{static_cast<SoilSensorTask*>(eventHandlerArg)};
 
         // Interpret data as sample data
-        SampleData sampleData{*reinterpret_cast<SampleData*>(eventData)};
+        SampleSession sampleSession{*reinterpret_cast<SampleSession*>(eventData)};
 
         ESP_LOGI(TAG, "Sample Requested");
 
         // Setup sampling process
-        self->PrepareForSampling(sampleData);
+        self->PrepareSampleSession(sampleSession);
     }
 }

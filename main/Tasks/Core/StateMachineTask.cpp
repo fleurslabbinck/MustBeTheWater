@@ -25,4 +25,10 @@ namespace gg
         m_CurrentState = newState;
         ResetWaitTime();
     }
+
+    // Change task delay without switching state
+    void StateMachineTask::SetDelay(uint32_t delay)
+    {
+        ChangeWaitTime(delay);
+    }
 }
