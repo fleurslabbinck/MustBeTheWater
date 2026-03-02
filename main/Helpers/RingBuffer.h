@@ -24,7 +24,7 @@ namespace gg
             // Pop oldest item if buffer is full
             if (IsFull())
             {
-                // Essentially pop oldest value
+                // Prepare to overwrite oldest item
                 IncrementIndex(m_TailIdx);
             }
 
@@ -63,6 +63,13 @@ namespace gg
 
             // Find index relevant to buffer start and return item
             return m_Buffer[IndexWrappedBySize(m_TailIdx + index)];
+        }
+
+        // Reset ring buffer
+        void Reset()
+        {
+            m_HeadIdx = 0;
+            m_TailIdx = 0;
         }
 
         bool IsEmpty() const

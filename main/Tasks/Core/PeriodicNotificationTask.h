@@ -21,7 +21,6 @@ namespace gg
 
         void InitOnStart() override;
         void Wait() override;
-        void Unblock() override;
     };
 }
 #endif

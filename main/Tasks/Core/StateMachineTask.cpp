@@ -2,6 +2,11 @@
 
 namespace gg
 {
+    void StateMachineTask::InitOnStart()
+    {
+        InitializeStateMachine();
+    }
+
     void StateMachineTask::Execute()
     {
         // Update state behavior

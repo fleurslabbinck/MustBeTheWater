@@ -41,6 +41,7 @@ namespace gg
         State m_CurrentState{};
         std::unordered_map<State, std::unique_ptr<BaseState>> m_States{};
 
+        void InitOnStart() override;
         void Execute() override;
     };
 }

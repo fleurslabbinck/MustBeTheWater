@@ -16,7 +16,8 @@ namespace gg
         }
 
         // Task is blocked until it gets notified or the waiting time passes
-        ulTaskNotifyTake(pdTRUE, m_WaitTicks);
+        // No bits cleared on entry, all bits cleared on exit
+        xTaskNotifyWait(0, 0xFFFFFFFF, &m_NotificationValue, m_WaitTicks);
     }
 
     // Reset delay time to max delay
@@ -37,6 +38,15 @@ namespace gg
         if (handle)
         {
             xTaskNotify(handle, 0, eNoAction);
+        }
+    }
+
+    void NotificationTask::Unblock(uint32_t notificationValue)
+    {
+        const TaskHandle_t handle{GetHandle()};
+        if (handle)
+        {
+            xTaskNotify(handle, notificationValue, eSetBits);
         }
     }
 }

@@ -34,13 +34,4 @@ namespace gg
         // Update wake time
         m_LastWake = xTaskGetTickCount();
     }
-
-    void PeriodicNotificationTask::Unblock()
-    {
-        const TaskHandle_t handle{GetHandle()};
-        if (handle)
-        {
-            xTaskNotify(handle, 0, eNoAction);
-        }
-    }
 }

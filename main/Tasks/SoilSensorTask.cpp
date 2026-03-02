@@ -18,9 +18,6 @@ namespace gg
 
     void SoilSensorTask::Start()
     {
-        // Initialize states first
-        InitializeStateMachine();
-
         // Task creation
         TaskConfig taskConfig{};
         taskConfig.name = "Soil Sensor Task";
@@ -38,7 +35,7 @@ namespace gg
         m_SoilSensor = std::make_unique<SoilSensor>(soilSensorConfig);
 
         // Subscribe event handlers to their event
-        SubscribeToEvent(this, OnSoilSensorDataRequested, MAIN_EVENTS, static_cast<int32_t>(MainEvents::RequestSensorData));
+        SubscribeToEvent(this, OnSoilSensorDataRequested, MAIN_EVENTS, static_cast<int32_t>(MainEvents::SensorDataRequested));
     }
 
     void SoilSensorTask::InitializeStateMachine()
@@ -89,7 +86,7 @@ namespace gg
             m_ActiveSampleSession = std::nullopt;
         }
 
-        EventBus::Get().PostEvent<float>(m_SoilSensorOutput, MAIN_EVENTS, static_cast<int32_t>(MainEvents::ShareSensorOutput));
+        EventBus::Get().PostEvent<float>(m_SoilSensorOutput, MAIN_EVENTS, static_cast<int32_t>(MainEvents::SensorOutputShared));
     }
 
     // Try to get delay between samples from active sample session

@@ -17,9 +17,13 @@ namespace gg
         NotificationTask& operator=(NotificationTask&&) = delete;
 
     protected:
+        uint32_t m_NotificationValue{};
         TickType_t m_WaitTicks{portMAX_DELAY};
 
+        bool IsBitSet(uint32_t bit) const {return m_NotificationValue & bit;}
+
         void Unblock() override;
+        void Unblock(uint32_t notificationValue);
         void ChangeWaitTime(uint32_t waitTime);
         void ResetWaitTime();
         

@@ -10,8 +10,10 @@ namespace gg
 {
     enum class MainEvents : int32_t
     {
-        RequestSensorData,
-        ShareSensorOutput,
+        SensorCalibrationRequested,
+        SensorDataRequested,
+        SensorOutputShared,
+        AverageSensorOutputShared
     };
 }
 #endif
