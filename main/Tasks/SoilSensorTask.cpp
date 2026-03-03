@@ -1,11 +1,11 @@
 #include "SoilSensorTask.h"
 
 #include "esp_log.h"
-#include "State/SoilSensorTaskState/SoilSensorTaskState.h"
-#include "State/SoilSensorTaskState/SstIdleState.h"
-#include "State/SoilSensorTaskState/SstPrepareState.h"
-#include "State/SoilSensorTaskState/SstReadyState.h"
-#include "State/SoilSensorTaskState/SstResetState.h"
+#include "Tasks/SoilSensorTaskStates/SoilSensorTaskState.h"
+#include "Tasks/SoilSensorTaskStates/SstIdleState.h"
+#include "Tasks/SoilSensorTaskStates/SstPrepareState.h"
+#include "Tasks/SoilSensorTaskStates/SstReadyState.h"
+#include "Tasks/SoilSensorTaskStates/SstResetState.h"
 #include "Events/Events.h"
 
 namespace gg

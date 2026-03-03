@@ -3,7 +3,6 @@
 
 #include "Tasks/SoilSensorTask.h"
 #include "Tasks/DataProcessTask.h"
-#include "Tasks/DataProcessTask.h"
 
 namespace gg
 {

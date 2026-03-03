@@ -2,7 +2,7 @@
 
 #include "esp_log.h"
 #include "Tasks/SoilSensorTask.h"
-#include "State/SoilSensorTaskState/SoilSensorTaskState.h"
+#include "Tasks/SoilSensorTaskStates/SoilSensorTaskState.h"
 
 namespace gg
 {

@@ -2,7 +2,7 @@
 #define SOIL_SENSOR_TASK_IDLE_STATE_H
 
 #include <cstdint>
-#include "State/SoilSensorTaskState/SstBaseState.h"
+#include "Tasks/SoilSensorTaskStates/SstBaseState.h"
 
 namespace gg
 {

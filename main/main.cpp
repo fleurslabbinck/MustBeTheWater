@@ -1,10 +1,10 @@
 #include <iostream>
 
 #include "sdkconfig.h"
-#include "Program.h"
+#include "Application.h"
 
 extern "C" void app_main(void)
 {
-    const gg::Program program{};
-    program.Init();
+    const gg::Application app{};
+    app.Init();
 }

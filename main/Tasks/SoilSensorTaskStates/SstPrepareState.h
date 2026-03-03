@@ -1,7 +1,7 @@
 #ifndef SOIL_SENSOR_TASK_PREPARE_STATE_H
 #define SOIL_SENSOR_TASK_PREPARE_STATE_H
 
-#include "State/SoilSensorTaskState/SstBaseState.h"
+#include "Tasks/SoilSensorTaskStates/SstBaseState.h"
 
 namespace gg
 {
